@@ -1,10 +1,11 @@
 {
   "name": "appmetrics.js",
-  "description": "Record and report your web app metrics to Google Analytics",
-  "private": true,
+  "description": "Record and report your web app's performance metrics to Google Analytics",
+  "version": "0.0.1",
   "engines": {
     "node": ">=6.0.0"
   },
+  "main": "./src/appmetrics.js",
   "scripts": {
     "postinstall": "gulp",
     "lint": "gulp lint",
