@@ -10,7 +10,7 @@ INSERT IMAGE
 
 To measure how long something takes in your app, first create a new metric:
 
-    let metric = new Metric('my_event'); // each name should be unique.
+    let metric = new Metric('my_event'); // each metric name should be unique.
 
 Specify the beginning of your event by calling `start()`. This adds a mark in the DevTools timeline:
 
@@ -21,7 +21,7 @@ and measures the duration:
 
     metric.end(); // mark name will be "mark_my_event_end".
     console.log(`${metric.name} took ${metric.duration} ms`);
-    metric.log(); // Helper that does the same thing.
+    metric.log(); // Helper for logging the metric info to the console.
 
 From here, you can examine performance of your measurements in the DevTools timeline under User Timings:
 
@@ -33,30 +33,30 @@ INSERT IMAGE
 
 Metrics can be reported to Google Analytics using `sendToAnalytics(<category>)`. These show up in the Analytics UI under [User Timing](https://developers.google.com/analytics/devguides/collection/analyticsjs/user-timings).
 
-The first argument to `sendToAnalytics()` is the category of your metric ('page load', 'gallery', 'video'). The second argument is an optional name of the metric ('first paint', 'init', 'play').  By default, `metric.name` is used but oftentimes it's more convenient to have shorter names in the Google Analytics UI.
+    metric1.sendToAnalytics('page load');
+    metric2.sendToAnalytics('render', 'first paint'); // Optional 2nd arg is an event name
+    metric3.sendToAnalytics('JS Dependencies', 'load', 1234567890); // Optional 3rd arg to override metric3.duration.
 
-Examples
-
-    metric.sendToAnalytics('page ready');
-    metric.sendToAnalytics('load', 'first paint'); // Optional 2nd arg is an event name
-    metric.sendToAnalytics('JS Dependencies', 'load', 1234567890); // Optional 3rd arg to override duration.
+The first argument to `sendToAnalytics()` is the category of your metric ('load', 'gallery', 'video'). The second argument is an optional name of the metric ('first paint', 'reveal', 'watch_started').  By default, `metric.name` is used, but oftentimes it's more convenient to send a shorter to Google Analytics so it renders it nicely in its UI.
 
 ### Tips
 
-For easier use, methods can also be chained:
+All methods can be chained for easier use:
 
-    metric.end().log().sendToAnalytics('app task', 'syntax highlight');
+    metric.start();
+    // ... some time later ...
+    metric.end().log().sendToAnalytics('extras', 'syntax highlight');
 
 ### Examples
 
-**Example** - measure how long it takes a json file to load and report it to Google Analytics:
+**Example** - measure how long it takes a json file to load, and report it to Google Analytics:
 
     <script>
-      let metric = new Metric('features_loaded');
+      const metric = new Metric('features_loaded');
       metric.start();
 
       function onFeaturesLoad() {
-        metric.end().log().sendToAnalytics('features', 'load');
+        metric.end().log().sendToAnalytics('features', 'loaded');
       }
     </script>
     <script src="features.json" onload="onFeaturesLoad()"></script>
@@ -85,9 +85,11 @@ For easier use, methods can also be chained:
 
     // Take measurement after page load.
     window.addEventListener('load', function(e) {
-      let fp = getFirstPaintIfSupported();
+      const fp = getFirstPaintIfSupported();
       if (fp) {
         let metric = new Metric('firstpaint');
+
+        // No need to call start()/end(). Can send a value, directly.
         metric.sendToAnalytics('load', metric.name, fp);
       }
     });
