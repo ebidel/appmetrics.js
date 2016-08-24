@@ -4,7 +4,7 @@ A small library for measuring things in your web app and reporting the results t
 
 In browsers that support the full [User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API), the library integrates with DevTools; marking your measurements in the timeline.
 
-INSERT IMAGE
+[![User timing inputs show up in the DevTools timeline](https://s16.postimg.org/bm2owyvqd/Screen_Shot_2016_08_23_at_6_03_30_PM.png)](https://postimg.org/image/icj66eiw1/)
 
 ### Usage
 
@@ -23,9 +23,11 @@ and measures the duration:
     console.log(`${metric.name} took ${metric.duration} ms`);
     metric.log(); // Helper for logging the metric info to the console.
 
-From here, you can examine performance of your measurements in the DevTools timeline under User Timings:
+From here, you can examine performance of your measurements in the console:
 
-INSERT IMAGE
+[![Logging records to the console](https://s4.postimg.org/b47jz5699/Screen_Shot_2016_08_23_at_6_08_26_PM.png)](https://postimg.org/image/h558w7svd/)
+
+Or view the records in the DevTools Timeline under "Input" (see screen shot above).
 
 ### Reporting metrics to Google Analytics
 
@@ -39,17 +41,9 @@ Metrics can be reported to Google Analytics using `sendToAnalytics(<category>)`.
 
 The first argument to `sendToAnalytics()` is the category of your metric ('load', 'gallery', 'video'). The second argument is an optional name of the metric ('first paint', 'reveal', 'watch_started').  By default, `metric.name` is used, but oftentimes it's more convenient to send a shorter to Google Analytics so it renders it nicely in its UI.
 
-### Tips
-
-All methods can be chained for easier use:
-
-    metric.start();
-    // ... some time later ...
-    metric.end().log().sendToAnalytics('extras', 'syntax highlight');
-
 ### Examples
 
-**Example** - measure how long it takes a json file to load, and report it to Google Analytics:
+Example - measure how long it takes a json file to load, and report it to Google Analytics:
 
     <script>
       const metric = new Metric('features_loaded');
@@ -61,7 +55,7 @@ All methods can be chained for easier use:
     </script>
     <script src="features.json" onload="onFeaturesLoad()"></script>
 
-**Example** report the first paint to Google Analytics.
+Example - report the first paint to Google Analytics.
 
     /**
      * Returns the browser's first paint metric (if available).
@@ -93,6 +87,14 @@ All methods can be chained for easier use:
         metric.sendToAnalytics('load', metric.name, fp);
       }
     });
+
+### Tips
+
+All methods can be chained for easier use:
+
+    metric.start();
+    // ... some time later ...
+    metric.end().log().sendToAnalytics('extras', 'syntax highlight');
 
 ### License
 
