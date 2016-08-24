@@ -1,10 +1,22 @@
 ## appmetrics.js
 
-A small library for measuring things in your web app and reporting the results to Google Analytics.
+> A small library for measuring things in your web app, annotating the DevTools timeline, and reporting the results to Google Analytics.
 
-In browsers that support the full [User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API), the library integrates with DevTools; marking your measurements in the timeline.
+This library is a smaller wrapper around the the [User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API). It makes it easier to use. appmetrics.js allows you to instrument your app, record performance metrics, and (optionally) report those metrics to [Google Analytics](https://analytics.google.com). Over time, you'l be able to track the performance of your web app!
+
+### What does it do?
+
+If you want to measure the performance of certain events in your web app. How long did that take?
+
+In browsers that support the full [User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API), this library integrates with DevTools. App measurements in the timeline:
 
 [![User timing inputs show up in the DevTools timeline](https://s16.postimg.org/bm2owyvqd/Screen_Shot_2016_08_23_at_6_03_30_PM.png)](https://postimg.org/image/icj66eiw1/)
+
+Marks you create will also show up in [webpagetest.org](https://www.webpagetest.org/) results:
+
+[![Screen Shot 2016-08-23 at 6.22.37 PM.png](https://s16.postimg.org/rxa0gsuxx/Screen_Shot_2016_08_23_at_6_22_37_PM.png)](https://postimg.org/image/6nme5yen5/)
+
+If you chose to send metrics to Google Analytics, values will show up its UI. See below.
 
 ### Usage
 
@@ -29,7 +41,7 @@ From here, you can examine performance of your measurements in the console:
 
 Or view the records in the DevTools Timeline under "Input" (see screen shot above).
 
-### Reporting metrics to Google Analytics
+### Reporting metrics to Google Analytics (optional)
 
 **Be sure to load the Google Analytics library on your page.**
 
@@ -40,6 +52,10 @@ Metrics can be reported to Google Analytics using `sendToAnalytics(<category>)`.
     metric3.sendToAnalytics('JS Dependencies', 'load', 1234567890); // Optional 3rd arg to override metric3.duration.
 
 The first argument to `sendToAnalytics()` is the category of your metric ('load', 'gallery', 'video'). The second argument is an optional name of the metric ('first paint', 'reveal', 'watch_started').  By default, `metric.name` is used, but oftentimes it's more convenient to send a shorter to Google Analytics so it renders it nicely in its UI.
+
+Values sen to Analytics will show up in its UI under **Behavior > Site Speed > User Timings**:
+
+[![Screen Shot 2016-08-23 at 6.40.03 PM.png](https://s3.postimg.org/6y0ay534j/Screen_Shot_2016_08_23_at_6_40_03_PM.png)](https://postimg.org/image/6l8wrykun/)
 
 ### Examples
 
@@ -87,6 +103,14 @@ Example - report the first paint to Google Analytics.
         metric.sendToAnalytics('load', metric.name, fp);
       }
     });
+
+### Browser support
+
+Any browser that supports `performance.now()`! That's  all the modern stuff: Chrome, Firefox, Safari 9.2+, Edge, IE 10, Android Browser 4.4, UC Browser.
+
+**Caveat**: In Safari, the [User Timing API](http://caniuse.com/#feat=user-timing) (`performance.mark()`) is not available, so the DevTools timeline will not be annotated with marks.
+
+See [caniuse.com](http://caniuse.com/#feat=high-resolution-time) for full support.
 
 ### Tips
 
