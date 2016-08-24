@@ -16,7 +16,7 @@ class Metric {
    * @static
    */
   static get supportsPerfNow() {
-    return self.performance && self.performance.now;
+    return performance && performance.now;
   }
 
   /**
@@ -25,7 +25,7 @@ class Metric {
    * @static
    */
   static get supportsPerfMark() {
-    return self.performance && self.performance.mark;
+    return performance && performance.mark;
   }
 
   /**
@@ -41,7 +41,7 @@ class Metric {
     if (Metric.supportsPerfMark) {
       // Note: this assumes the user has made only one measurement for the given
       // name. Return the first one found.
-      const entry = self.performance.getEntriesByName(this.name)[0];
+      const entry = performance.getEntriesByName(this.name)[0];
       if (entry && entry.entryType !== 'measure') {
         duration = entry.duration;
       }
@@ -103,7 +103,7 @@ class Metric {
     // Use User Timing API results if available, otherwise return
     // performance.now() fallback.
     if (Metric.supportsPerfNow) {
-      let items = self.performance.getEntriesByName(name);
+      let items = performance.getEntriesByName(name);
       for (let i = 0; i < items.length; ++i) {
         let item = items[i];
         console.info(name, item.duration, 'ms');
@@ -122,11 +122,11 @@ class Metric {
       return this;
     }
 
-    this._start = self.performance.now();
+    this._start = performance.now();
 
     // Support: developer.mozilla.org/en-US/docs/Web/API/Performance/mark
     if (Metric.supportsPerfMark) {
-      self.performance.mark(`mark_${this.name}_start`);
+      performance.mark(`mark_${this.name}_start`);
     }
 
     return this;
@@ -142,14 +142,14 @@ class Metric {
       return this;
     }
 
-    this._end = self.performance.now();
+    this._end = performance.now();
 
     // Support: developer.mozilla.org/en-US/docs/Web/API/Performance/mark
     if (Metric.supportsPerfMark) {
       let startMark = `mark_${this.name}_start`;
       let endMark = `mark_${this.name}_end`;
-      self.performance.mark(endMark);
-      self.performance.measure(this.name, startMark, endMark);
+      performance.mark(endMark);
+      performance.measure(this.name, startMark, endMark);
     }
 
     return this;
@@ -166,10 +166,10 @@ class Metric {
    * @return {Metric} Instance of this object.
    */
   sendToAnalytics(category, metric = this.name, duration = this.duration) {
-    if (!self.ga) {
+    if (!window.ga) {
       console.warn('Google Analytics has not been loaded');
     } else if (duration >= 0) {
-      self.ga('send', 'timing', category, metric, duration);
+      ga('send', 'timing', category, metric, duration);
     }
     return this;
   }

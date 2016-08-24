@@ -2,7 +2,6 @@
 
 A small library for measuring things in your web app and reporting the results to Google Analytics.
 
-
 In browsers that support the full [User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API), the library integrates with DevTools; marking your measurements in the timeline.
 
 INSERT IMAGE
@@ -92,4 +91,9 @@ For easier use, methods can also be chained:
         metric.sendToAnalytics('load', metric.name, fp);
       }
     });
+
+### License
+
+Apache 2. See the LICENSE.
+
 
