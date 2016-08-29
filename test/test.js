@@ -47,6 +47,10 @@ describe('appmetrics.js', function() {
       assert.equal(Metric.supportsPerfNow, performance.now);
       assert.equal(Metric.supportsPerfMark, performance.mark);
     });
+    it('has private properties', function() {
+      assert.isUndefined(metric._start);
+      assert.isUndefined(metric._end);
+    });
   });
 
   describe('start()', function() {
@@ -67,9 +71,7 @@ describe('appmetrics.js', function() {
     });
 
     it('can call again without issue', function() {
-      let start = metric._start;
       assert.instanceOf(metric.start(), Metric, 'Attempt to call start() again');
-      assert.equal(metric._start, start, 'start time did not change on 2nd call to start()');
       assert.equal(metric.duration, -1, 'duration should not be populated yet');
 
       // TODO: capture and test console.warn output.
@@ -99,9 +101,7 @@ describe('appmetrics.js', function() {
     });
 
     it('can call again without issue', function() {
-      let end = metric._end;
       assert.instanceOf(metric.end(), Metric, 'Attempt to call end() again');
-      assert.equal(metric._end, end, 'end time did not change on 2nd call to end()');
       assert.notEqual(metric.duration, -1, 'duration should be populated');
 
       // TODO: capture and test console.warn output.

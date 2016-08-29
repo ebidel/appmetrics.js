@@ -24,6 +24,10 @@
 
 'use strict';
 
+// Private members.
+let _start = new WeakMap();
+let _end = new WeakMap();
+
 class Metric {
 
   /**
@@ -50,7 +54,7 @@ class Metric {
    * @type {number}
    */
   get duration() {
-    let duration = this._end - this._start;
+    let duration = _end.get(this) - _start.get(this);
 
     // Use User Timing API results if available, otherwise return
     // performance.now() fallback.
@@ -133,12 +137,12 @@ class Metric {
    * @return {Metric} Instance of this object.
    */
   start() {
-    if (this._start) {
+    if (_start.get(this)) {
       console.warn('Recording already started.');
       return this;
     }
 
-    this._start = performance.now();
+    _start.set(this, performance.now());
 
     // Support: developer.mozilla.org/en-US/docs/Web/API/Performance/mark
     if (Metric.supportsPerfMark) {
@@ -153,12 +157,12 @@ class Metric {
    * @return {Metric} Instance of this object.
    */
   end() {
-    if (this._end) {
+    if (_end.get(this)) {
       console.warn('Recording already stopped.');
       return this;
     }
 
-    this._end = performance.now();
+    _end.set(this, performance.now());
 
     // Support: developer.mozilla.org/en-US/docs/Web/API/Performance/mark
     if (Metric.supportsPerfMark) {
