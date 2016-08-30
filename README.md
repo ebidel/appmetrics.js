@@ -18,7 +18,15 @@ Marks you create will also show up in [webpagetest.org](https://www.webpagetest.
 
 If you chose to send metrics to Google Analytics, values will show up its UI. See below.
 
+### Installing
+
+    bower install --save-dev ebidel/appmetrics.js
+
 ### Usage
+
+Drop this on your page:
+
+    <script src="bower_components/appmetrics.js/dist/appmetrics.min.js"></script>
 
 To measure how long something takes in your app, first create a new metric:
 
@@ -119,6 +127,20 @@ All methods can be chained for easier use:
     metric.start();
     // ... some time later ...
     metric.end().log().sendToAnalytics('extras', 'syntax highlight');
+
+### Contributing
+
+Checkout and install the dependencies:
+
+    git clone git@github.com:ebidel/appmetrics.js.git
+    cd appmetrics.js
+    npm install
+
+This will also run `gulp` for you.
+
+#### Run the tests
+
+Start a web server in the project directory and navigate to http://localhost:3000/test/. If you makes changes to the library, be sure to run `gulp` to rebuild the library in `/dist`.
 
 ### License
 
