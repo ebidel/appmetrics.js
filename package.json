@@ -18,7 +18,7 @@
   "scripts": {
     "lint": "gulp lint",
     "test": "./node_modules/mocha/bin/mocha",
-    "release": "npm version patch; npm publish"
+    "release": "npm version patch; gulp; npm publish"
   },
   "repository": {
     "type": "git",
