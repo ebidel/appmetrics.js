@@ -1,7 +1,7 @@
 {
   "name": "appmetrics.js",
   "description": "Record and report your web app's performance metrics to Google Analytics",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "license": "Apache-2.0",
   "engines": {
     "node": ">=6.0.0"
