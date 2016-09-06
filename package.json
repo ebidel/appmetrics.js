@@ -2,21 +2,29 @@
   "name": "appmetrics.js",
   "description": "Record and report your web app's performance metrics to Google Analytics",
   "version": "0.0.3",
+  "license": "Apache-2.0",
   "engines": {
     "node": ">=6.0.0"
   },
   "main": "./src/appmetrics.js",
+  "keywords": [
+    "metrics",
+    "analytics",
+    "reporting",
+    "measure",
+    "measurement",
+    "instrument"
+  ],
   "scripts": {
-    "postinstall": "./node_modules/gulp/bin/gulp.js",
     "lint": "gulp lint",
     "test": "./node_modules/mocha/bin/mocha"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ebidel/appmetrics"
+    "url": "https://github.com/ebidel/appmetrics.js"
   },
   "bugs": {
-    "url": "https://github.com/ebidel/appmetrics/issues"
+    "url": "https://github.com/ebidel/appmetrics.js/issues"
   },
   "devDependencies": {
     "babel-core": "^6.13.2",
