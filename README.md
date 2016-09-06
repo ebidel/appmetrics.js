@@ -20,13 +20,21 @@ If you chose to send metrics to Google Analytics, values will show up its UI. Se
 
 ### Installing
 
+Bower:
+
     bower install --save-dev ebidel/appmetrics.js
+
+npm:
+
+    npm install --save-dev appmetrics.js
 
 ### Usage
 
-Drop this on your page:
+Drop one of these on your page:
 
     <script src="bower_components/appmetrics.js/dist/appmetrics.min.js"></script>
+      or
+    <script src="node_modules/appmetrics.js/dist/appmetrics.min.js"></script>
 
 To measure how long something takes in your app, first create a new metric:
 
