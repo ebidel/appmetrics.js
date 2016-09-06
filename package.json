@@ -7,7 +7,7 @@
   },
   "main": "./src/appmetrics.js",
   "scripts": {
-    "postinstall": "gulp",
+    "postinstall": "./node_modules/gulp/bin/gulp.js",
     "lint": "gulp lint",
     "test": "./node_modules/mocha/bin/mocha"
   },
