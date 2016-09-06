@@ -5,19 +5,16 @@ import del from 'del';
 import runSequence from 'run-sequence';
 import gulpLoadPlugins from 'gulp-load-plugins';
 import closure from 'gulp-closure-compiler';
+import injectVersion from 'gulp-inject-version';
 
 const $ = gulpLoadPlugins();
 const SRC_DIR = 'src';
 const DIST_DIR = 'dist';
 
-// function uglifyJS() {
-//   return $.uglify({preserveComments: 'some'});
-// }
-
 function license() {
-  return $.license('Apache2', {
-    organization: 'Copyright (c) 2016 Eric Bidelman. All rights reserved.',
-    tiny: true
+  return $.license('Apache', {
+    organization: 'Copyright (c) 2016 Eric Bidelman. All rights reserved.\n\n * @version %%GULP_INJECT_VERSION%%',
+    tiny: false
   });
 }
 
@@ -45,9 +42,8 @@ gulp.task('build', () => {
         language_out: 'ECMASCRIPT5'
       }
     }))
-    //.pipe($.babel()) // Defaults are in .babelrc
-    //.pipe(uglifyJS())
-    // .pipe(license()) // Add license to top.
+    .pipe(license()) // Add license to top.
+    .pipe(injectVersion())
     .pipe($.rename({suffix: '.min'}))
     .pipe(gulp.dest(DIST_DIR));
 });

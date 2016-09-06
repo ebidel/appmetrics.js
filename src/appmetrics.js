@@ -18,6 +18,7 @@
 
 /**
  * @fileoverview
+ *
  * Class for recording metrics in the DevTools timeline using the User Timing
  * API and (optionally) reporting those timings to Google Analytics.
  */
