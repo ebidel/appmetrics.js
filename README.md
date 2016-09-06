@@ -143,8 +143,7 @@ Checkout and install the dependencies:
     git clone git@github.com:ebidel/appmetrics.js.git
     cd appmetrics.js
     npm install
-
-This will also run `gulp` for you.
+    gulp
 
 #### Run the tests
 
