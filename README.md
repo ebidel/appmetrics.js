@@ -2,7 +2,7 @@
 
 > A small (1.5KB gzip) library for measuring things in your web app, annotating the DevTools timeline, and reporting the results to Google Analytics.
 
-This library is a smaller wrapper around the the [User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API). It makes it easier to use. appmetrics.js allows you to instrument your app, record performance metrics, and (optionally) report those metrics to [Google Analytics](https://analytics.google.com). Over time, you'l be able to track the performance of your web app!
+This library is a small wrapper around the the [User Timing API](https://developer.mozilla.org/en-US/docs/Web/API/User_Timing_API). It makes it easier to use. appmetrics.js allows you to instrument your app, record performance metrics, and (optionally) report those metrics to [Google Analytics](https://analytics.google.com). Over time, you'll be able to track the performance of your web app!
 
 ### What does it do?
 
