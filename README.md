@@ -79,7 +79,7 @@ metric3.sendToAnalytics('JS Dependencies', 'load', 1234567890); // Optional 3rd 
 
 The first argument to `sendToAnalytics()` is the category of your metric ('load', 'gallery', 'video'). The second argument is an optional name of the metric ('first paint', 'reveal', 'watch_started').  By default, `metric.name` is used, but oftentimes it's more convenient to send a shorter to Google Analytics so it renders it nicely in its UI.
 
-Values sen to Analytics will show up in its UI under **Behavior > Site Speed > User Timings**:
+Values sent to Analytics will show up in its UI under **Behavior > Site Speed > User Timings**:
 
 [![Screen Shot 2016-08-23 at 6.40.03 PM.png](https://s3.postimg.org/6y0ay534j/Screen_Shot_2016_08_23_at_6_40_03_PM.png)](https://postimg.org/image/6l8wrykun/)
 
