@@ -24,7 +24,7 @@ Bower:
 
     bower install --save-dev ebidel/appmetrics.js
 
-npm:
+npm (https://www.npmjs.com/package/appmetrics.js):
 
     npm install --save-dev appmetrics.js
 
