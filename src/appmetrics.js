@@ -37,7 +37,7 @@ class Metric {
    * @static
    */
   static get supportsPerfNow() {
-    return performance && performance.now;
+    return self.performance && performance.now;
   }
 
   /**
@@ -46,7 +46,7 @@ class Metric {
    * @static
    */
   static get supportsPerfMark() {
-    return performance && performance.mark;
+    return self.performance && performance.mark;
   }
 
   /**
