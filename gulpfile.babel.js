@@ -13,8 +13,8 @@ const DIST_DIR = 'dist';
 
 function license() {
   return $.license('Apache', {
-    organization: 'Copyright (c) 2016 Eric Bidelman. All rights reserved.\n\n * @version %%GULP_INJECT_VERSION%%',
-    tiny: false
+    organization: 'Eric Bidelman. All rights reserved. - @version %%GULP_INJECT_VERSION%%',
+    tiny: true
   });
 }
 
