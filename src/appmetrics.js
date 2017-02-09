@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 /**
  * Copyright 2016 - Eric Bidelman <ebidel@>
  *
@@ -23,11 +21,11 @@
  * API and (optionally) reporting those timings to Google Analytics.
  */
 
-'use strict';
+/* eslint-disable no-console */
 
 // Private members.
-let _start = new WeakMap();
-let _end = new WeakMap();
+const _start = new WeakMap();
+const _end = new WeakMap();
 
 class Metric {
 
@@ -37,7 +35,7 @@ class Metric {
    * @static
    */
   static get supportsPerfNow() {
-    return self.performance && performance.now;
+    return Boolean(self.performance && performance.now);
   }
 
   /**
@@ -46,7 +44,7 @@ class Metric {
    * @static
    */
   static get supportsPerfMark() {
-    return self.performance && performance.mark;
+    return Boolean(self.performance && performance.mark);
   }
 
   /**
@@ -81,26 +79,10 @@ class Metric {
 
     if (!Metric.supportsPerfMark) {
       console.warn(`Timeline won't be marked for "${name}".`);
-
       if (!Metric.supportsPerfNow) {
         throw Error('This library cannot be used in this browser.');
       }
     }
-
-    // if (window.PerformanceObserver) {}
-    //   let observer = new PerformanceObserver(list => {
-    //     list.getEntries().forEach(entry => {
-    //       // Display each reported measurement on console
-    //       if (console) {
-    //         console.log("Name: "       + entry.name      +
-    //                     ", Type: "     + entry.entryType +
-    //                     ", Start: "    + entry.startTime +
-    //                     ", Duration: " + entry.duration  + "\n");
-    //       }
-    //     })
-    //   });
-    //   observer.observe({entryTypes: ['resource', 'mark', 'measure']});
-    // }
 
     this.name = name;
   }
@@ -124,9 +106,9 @@ class Metric {
     // Use User Timing API results if available, otherwise return
     // performance.now() fallback.
     if (Metric.supportsPerfNow) {
-      let items = performance.getEntriesByName(name);
+      const items = performance.getEntriesByName(name);
       for (let i = 0; i < items.length; ++i) {
-        let item = items[i];
+        const item = items[i];
         console.info(name, item.duration, 'ms');
       }
     }
@@ -167,8 +149,8 @@ class Metric {
 
     // Support: developer.mozilla.org/en-US/docs/Web/API/Performance/mark
     if (Metric.supportsPerfMark) {
-      let startMark = `mark_${this.name}_start`;
-      let endMark = `mark_${this.name}_end`;
+      const startMark = `mark_${this.name}_start`;
+      const endMark = `mark_${this.name}_end`;
       performance.mark(endMark);
       performance.measure(this.name, startMark, endMark);
     }
@@ -194,4 +176,9 @@ class Metric {
     }
     return this;
   }
+}
+
+if (typeof module !== 'undefined') {
+  module.exports = Metric;
+  // export default Metric;
 }

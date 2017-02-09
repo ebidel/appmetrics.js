@@ -1,32 +1,37 @@
 /* eslint-env node, mocha */
+/* global PerformanceObserver, Metric, chai */
 
 const assert = chai.assert;
 
+/* eslint-disable */
+function loadAnalytics() {
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m);
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-XXXXX-Y', 'auto');
+}
+/* eslint-enable */
+
+loadAnalytics();
+
 describe('appmetrics.js', function() {
   const METRIC_NAME = 'test_metric';
-  let metric = new Metric(METRIC_NAME);
-
-  function loadAnalytics() {
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m);
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-XXXXX-Y', 'auto');
-  }
+  const metric = new Metric(METRIC_NAME);
 
   function isAnalyticsRequest(entry) {
     return entry.name.includes('/collect') && entry.name.includes('t=timing');
   }
 
   if (!window.PerformanceObserver) {
-    throw 'Cannot run tests in a browser PerformanceObserver';
+    throw Error('Cannot run tests in a browser PerformanceObserver');
   }
 
   before(function() {
     if (!location.origin.includes('localhost')) {
       assert.fail(false, true, 'Tests need to be run from a web server.');
     }
-    loadAnalytics();
+    // loadAnalytics();
   });
 
   beforeEach(function() {
@@ -44,8 +49,8 @@ describe('appmetrics.js', function() {
       assert.equal(metric.duration, -1);
     });
     it('has correct feature detection', function() {
-      assert.equal(Metric.supportsPerfNow, performance.now);
-      assert.equal(Metric.supportsPerfMark, performance.mark);
+      assert.equal(Metric.supportsPerfNow, true);
+      assert.equal(Metric.supportsPerfMark, true);
     });
     it('has private properties', function() {
       assert.isUndefined(metric._start);
@@ -54,12 +59,11 @@ describe('appmetrics.js', function() {
   });
 
   describe('start()', function() {
-
     it('creates a mark', function(done) {
-      let observer = new PerformanceObserver(list => {
+      const observer = new PerformanceObserver(list => {
         observer.disconnect();
 
-        let entries = list.getEntriesByName(`mark_${METRIC_NAME}_start`);
+        const entries = list.getEntriesByName(`mark_${METRIC_NAME}_start`);
         assert.equal(entries[0].entryType, 'mark', 'not a mark entry');
         assert.equal(entries.length, 1);
 
@@ -79,17 +83,15 @@ describe('appmetrics.js', function() {
   });
 
   describe('end()', function() {
-
     it('creates a mark', function(done) {
-
-      let observer = new PerformanceObserver(list => {
+      const observer = new PerformanceObserver(list => {
         observer.disconnect();
 
-        let markEntries = list.getEntriesByName(`mark_${METRIC_NAME}_end`);
+        const markEntries = list.getEntriesByName(`mark_${METRIC_NAME}_end`);
         assert.equal(markEntries.length, 1);
         assert.equal(markEntries[0].entryType, 'mark', 'not a mark entry');
 
-        let measureEntries = list.getEntriesByName(METRIC_NAME);
+        const measureEntries = list.getEntriesByName(METRIC_NAME);
         assert.equal(measureEntries[0].entryType, 'measure', 'not a measurement entry');
         assert.equal(measureEntries.length, 1);
 
@@ -125,12 +127,11 @@ describe('appmetrics.js', function() {
   });
 
   describe('sendToAnalytics()', function() {
-
     it('sends default request', function(done) {
-      let observer = new PerformanceObserver(list => {
+      const observer = new PerformanceObserver(list => {
         observer.disconnect();
 
-        let entries = list.getEntries().filter(entry => {
+        const entries = list.getEntries().filter(entry => {
           return isAnalyticsRequest(entry) &&
                  entry.name.includes(metric.duration) &&
                  entry.name.includes(metric.name) &&
@@ -146,10 +147,10 @@ describe('appmetrics.js', function() {
     });
 
     it('can override duration and name', function(done) {
-      let observer = new PerformanceObserver(list => {
+      const observer = new PerformanceObserver(list => {
         observer.disconnect();
 
-        let entries = list.getEntries().filter(entry => {
+        const entries = list.getEntries().filter(entry => {
           return isAnalyticsRequest(entry) &&
                  entry.name.includes('1234567890') &&
                  entry.name.includes('category_name') &&
@@ -165,12 +166,12 @@ describe('appmetrics.js', function() {
     });
 
     it('can send a duration without measuring', function(done) {
-      let duration = Date.now();
+      const duration = Date.now();
 
-      let observer = new PerformanceObserver(list => {
+      const observer = new PerformanceObserver(list => {
         observer.disconnect();
 
-        let entries = list.getEntries().filter(entry => {
+        const entries = list.getEntries().filter(entry => {
           return isAnalyticsRequest(entry) &&
                  entry.name.includes(duration) &&
                  entry.name.includes('category_name') &&
@@ -182,24 +183,24 @@ describe('appmetrics.js', function() {
       });
       observer.observe({entryTypes: ['resource']});
 
-      let metric = new Metric('override_duration');
+      const metric = new Metric('override_duration');
       metric.sendToAnalytics('category_name', metric.name, duration);
     });
 
     it('no requests are to GA before a measurement', function(done) {
       // If the perf observer sees a request, the test should fail.
-      let observer = new PerformanceObserver(list => {
+      const observer = new PerformanceObserver(list => {
         observer.disconnect();
-        assert.fail(false, true, 'Google Analytics request was sent before a measurement was made.');
+        assert.fail(
+            false, true, 'Google Analytics request was sent before a measurement was made.');
         done();
       });
       observer.observe({entryTypes: ['resource']});
 
-      let metric = new Metric('test_metric');
+      const metric = new Metric('test_metric');
       metric.sendToAnalytics('should_not_be_sent');
 
       setTimeout(done, 500);
     });
   });
-
 });
