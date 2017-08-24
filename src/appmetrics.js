@@ -172,7 +172,7 @@ class Metric {
     if (!window.ga) {
       console.warn('Google Analytics has not been loaded');
     } else if (duration >= 0) {
-      ga('send', 'timing', category, metric, duration);
+      ga('send', 'timing', category, metric, Math.round(duration));
     }
     return this;
   }
