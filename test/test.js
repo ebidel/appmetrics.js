@@ -133,7 +133,7 @@ describe('appmetrics.js', function() {
 
         const entries = list.getEntries().filter(entry => {
           return isAnalyticsRequest(entry) &&
-                 entry.name.includes(metric.duration) &&
+                 entry.name.includes(Math.round(metric.duration)) &&
                  entry.name.includes(metric.name) &&
                  entry.name.includes('category_name');
         });
