@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "lint": "gulp lint",
-    "test": "./node_modules/mocha/bin/mocha",
+    "test": "karma start",
     "release": "npm version patch; gulp; npm publish"
   },
   "repository": {
@@ -43,5 +43,12 @@
     "gulp-rename": "^1.2.2",
     "mocha": "^3.0.1",
     "run-sequence": "^1.2.2"
+  },
+  "dependencies": {
+    "karma": "^2.0.0",
+    "karma-babel-preprocessor": "^7.0.0",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-mocha": "^1.3.0"
   }
 }
