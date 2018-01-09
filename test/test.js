@@ -40,7 +40,9 @@ describe('appmetrics.js', function() {
 
   describe('init', function() {
     it('constructor fails without name', function() {
-      assert.throws(function test() { return new Metric(); });
+      assert.throws(function test() {
+        return new Metric();
+      });
     });
     it('name is correct', function() {
       assert.equal(metric.name, 'test_metric');
@@ -127,80 +129,34 @@ describe('appmetrics.js', function() {
   });
 
   describe('sendToAnalytics()', function() {
-    it('sends default request', function(done) {
-      const observer = new PerformanceObserver(list => {
-        observer.disconnect();
-
-        const entries = list.getEntries().filter(entry => {
-          return isAnalyticsRequest(entry) &&
-                 entry.name.includes(Math.round(metric.duration)) &&
-                 entry.name.includes(metric.name) &&
-                 entry.name.includes('category_name');
-        });
-
-        assert.equal(entries.length, 1, 'single timing entry');
-        done();
-      });
-      observer.observe({entryTypes: ['resource']});
-
+    let spy;
+    beforeEach(() => {
+      spy = sinon.spy(window, 'ga');
+    });
+    afterEach(() => {
+      spy.restore();
+    });
+    it('sends default request', function() {
       metric.sendToAnalytics('category_name');
+      assert(spy.calledWith('send', 'timing', 'category_name', metric.name, Math.round(metric.duration)));
     });
 
-    it('can override duration and name', function(done) {
-      const observer = new PerformanceObserver(list => {
-        observer.disconnect();
-
-        const entries = list.getEntries().filter(entry => {
-          return isAnalyticsRequest(entry) &&
-                 entry.name.includes('1234567890') &&
-                 entry.name.includes('category_name') &&
-                 entry.name.includes('metric_name');
-        });
-
-        assert.equal(entries.length, 1, 'one timing entry');
-        done();
-      });
-      observer.observe({entryTypes: ['resource']});
-
+    it('can override duration and name', function() {
       metric.sendToAnalytics('category_name', 'metric_name', 1234567890);
+      assert(spy.calledWith('send', 'timing', 'category_name', 'metric_name', 1234567890));
     });
 
-    it('can send a duration without measuring', function(done) {
+    it('can send a duration without measuring', function() {
       const duration = Date.now();
-
-      const observer = new PerformanceObserver(list => {
-        observer.disconnect();
-
-        const entries = list.getEntries().filter(entry => {
-          return isAnalyticsRequest(entry) &&
-                 entry.name.includes(duration) &&
-                 entry.name.includes('category_name') &&
-                 entry.name.includes('override_duration');
-        });
-
-        assert.equal(entries.length, 1, 'one timing entry');
-        done();
-      });
-      observer.observe({entryTypes: ['resource']});
-
       const metric = new Metric('override_duration');
       metric.sendToAnalytics('category_name', metric.name, duration);
+      assert(spy.calledWith('send', 'timing', 'category_name', metric.name, duration));
     });
 
-    it('no requests are to GA before a measurement', function(done) {
-      // If the perf observer sees a request, the test should fail.
-      const observer = new PerformanceObserver(list => {
-        observer.disconnect();
-        assert.fail(
-            false, true, 'Google Analytics request was sent before a measurement was made.');
-        done();
-      });
-      observer.observe({entryTypes: ['resource']});
-
+    it('no requests are to GA before a measurement', function() {
       const metric = new Metric('test_metric');
       metric.sendToAnalytics('should_not_be_sent');
-
-      setTimeout(done, 500);
+      assert(spy.notCalled);
     });
   });
 });

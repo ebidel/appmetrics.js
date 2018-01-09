@@ -1,6 +1,6 @@
 module.exports = function(config) {
   config.set({
-    frameworks: ['mocha', 'chai'],
+    frameworks: ['mocha', 'chai', 'sinon'],
     preprocessors: {
       'src/appmetrics.js': ['babel'],
       'test/**/*.js': ['babel']
