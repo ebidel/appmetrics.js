@@ -161,7 +161,10 @@ Checkout and install the dependencies:
 
 #### Run the tests
 
-Start a web server in the project directory and navigate to http://localhost:3000/test/. If you makes changes to the library, be sure to run `gulp` to rebuild the library in `/dist`.
+Run:
+  npm run test
+  // To debug
+  npm run tests:debug
 
 ### License
 
